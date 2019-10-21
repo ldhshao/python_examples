@@ -3,6 +3,7 @@ from urllib.request import urlopen
 import lxml.html
 from lxml.cssselect import CSSSelector
 from lxml.etree import tostring
+import re
 
 def epub_write_test():
     book = epub.EpubBook()
@@ -94,6 +95,15 @@ def epub_write_coolshell():
         match_title = CSSSelector('h1.entry-title')
         title = match_title(chapter_tree)[0].text
         match_content = CSSSelector('div.entry-content')
+        content_tree = match_content(chapter_tree)[0]
+        match_img = CSSSelector('img')
+        img_idx = 0
+        for img_item in match_img(content_tree):
+                img_url = img_item.get('src')
+                img_local = '%d.jpg' % img_idx
+                suffix = ''
+                if re.match('https://coolshell.cn', img_item.get('src')) is not None:
+                    img_item.set('src', img_local)
         chapter_content = tostring(match_content(chapter_tree)[0], encoding='unicode')
         chapter_file = 'chap_%02d.xhtml' % chapter_no
     
@@ -135,6 +145,13 @@ def epub_write_coolshell():
     # write to the file
     epub.write_epub('coolshell.epub', book, {})
 
+def get_image_from_url(url, img_local):
+    with urlopen(url) as img_url:
+        with open(img_local, 'wb') as f:
+            f.write(img_url.read())
+
 if __name__ == '__main__':
     #epub_write_test()
     epub_write_coolshell()
+    #get_image_from_url('https://coolshell.cn/wp-content/uploads/2019/10/HOL_blocking.png', 'hol_blocking.png')
+    #get_image_from_url('https://coolshell.cn/wp-content/uploads/2019/10/HOL_blocking.png', '/home/test/hol_blocking.png')

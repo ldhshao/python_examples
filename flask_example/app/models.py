@@ -67,11 +67,16 @@ class User(UserMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_seen    = db.Column(db.DateTime(), default=datetime.utcnow)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    balance = db.Column(db.Integer, default=0)
+    fee_day = db.Column(db.Integer, default=1)
+    sndcnt_month = db.Column(db.Integer, default=0)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     followed = db.relationship('Follow', foreign_keys=[Follow.follower_id], backref=db.backref('follower', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan')
     followers = db.relationship('Follow', foreign_keys=[Follow.followed_id], backref=db.backref('followed', lazy='joined'), lazy='dynamic', cascade='all, delete-orphan')
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
+        self.balance = 0
+        self.sndcnt_month = 0
         if self.role is None:
             if self.email == current_app.config['FLASKY_ADMIN']:
                 self.role = Role.query.filter_by(permissions=RolePermissionCode.ADMINISTRATOR).first()
@@ -153,6 +158,24 @@ class User(UserMixin, db.Model):
     @property
     def followed_posts(self):
         return db.session.query(Post).select_from(Follow).filter_by(follower_id=self.id).join(Post, Follow.followed_id == Post.author_id)
+
+    def add_balance(self, delta):
+        if delta > 0:
+            if self.balance == 0:
+                self.fee_day = datetime.now().date().day 
+        self.balance = self.balance + delta
+        return self.balance
+
+    def update_balance(self):
+        if datetime.now().date().day == self.fee_day and self.sndcnt_month > 0:
+            if self.sndcnt_month <= 50:
+                self.balance = self.balance - 1 / 50.0 * self.sndcnt_month
+            else:
+                self.balance = self.balance - 1
+            if self.balance < 0:
+                self.balance = 0
+            self.sndcnt_month = 0
+        return self.balance
 
     @staticmethod
     def generate_fake(count=100):

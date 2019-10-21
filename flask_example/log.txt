@@ -99,3 +99,145 @@ INFO:app:Have created an app instance
 INFO:root:manager run start
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 185-612-512
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+ERROR:root:Error: Directory migrations already exists and is not empty
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://172.18.111.34:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://172.18.111.34:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 728-790-709
+INFO:app:index
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:23:26] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:23:28] "GET /static/favicon.ico HTTP/1.1" 200 -
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:24:00] "GET /auth/login HTTP/1.1" 200 -
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:24:00] "GET /static/favicon.ico HTTP/1.1" 304 -
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:24:18] "POST /auth/login HTTP/1.1" 302 -
+INFO:app:index
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:24:18] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:24:19] "GET /static/favicon.ico HTTP/1.1" 304 -
+INFO:werkzeug:172.18.111.33 - - [02/Oct/2019 12:24:26] "GET /user/liudonghao HTTP/1.1" 200 -
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:app:Have created an app instance
