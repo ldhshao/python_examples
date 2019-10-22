@@ -97,13 +97,14 @@ def epub_write_coolshell():
         match_content = CSSSelector('div.entry-content')
         content_tree = match_content(chapter_tree)[0]
         match_img = CSSSelector('img')
-        img_idx = 0
         for img_item in match_img(content_tree):
-                img_url = img_item.get('src')
-                img_local = '%d.jpg' % img_idx
-                suffix = ''
-                if re.match('https://coolshell.cn', img_item.get('src')) is not None:
-                    img_item.set('src', img_local)
+            img_url = img_item.get('src')
+            listtmp = re.split('/+', img_url)
+            jpg_name = listtmp[-1]
+            img_local = '%02d%s' % (chapter_no, jpg_name)
+            print('img ' + img_url + ' local ' + img_local)
+            get_image_from_url(img_url, img_local)
+            img_item.set('src', img_local)
         chapter_content = tostring(match_content(chapter_tree)[0], encoding='unicode')
         chapter_file = 'chap_%02d.xhtml' % chapter_no
     
@@ -146,9 +147,12 @@ def epub_write_coolshell():
     epub.write_epub('coolshell.epub', book, {})
 
 def get_image_from_url(url, img_local):
-    with urlopen(url) as img_url:
-        with open(img_local, 'wb') as f:
-            f.write(img_url.read())
+    try:
+        with urlopen(url) as img_url:
+            with open(img_local, 'wb') as f:
+                f.write(img_url.read())
+    except Exception:
+        print('Error in read %s' % url)
 
 if __name__ == '__main__':
     #epub_write_test()
