@@ -105,6 +105,14 @@ def epub_write_coolshell():
             print('img ' + img_url + ' local ' + img_local)
             get_image_from_url(img_url, img_local)
             img_item.set('src', img_local)
+            #add the image to book
+            img_item = epub.EpubImage()
+            img_item.file_name = img_local
+            try:
+                img_item.content = open(img_local, 'rb').read()
+            except Exception:
+                print('Error open %s' % img_local)
+            book.add_item(img_item)
         chapter_content = tostring(match_content(chapter_tree)[0], encoding='unicode')
         chapter_file = 'chap_%02d.xhtml' % chapter_no
     
@@ -115,6 +123,8 @@ def epub_write_coolshell():
         chapter_tocs.append(epub.Link(chapter_file, title, title))
         book.spine.append(c1)
         chapter_no = chapter_no + 1 
+        if chapter_no > 2:
+            break
     
     match = CSSSelector('div.entry-content')
     chapter_content = tostring(match(tree)[0], encoding='unicode')
