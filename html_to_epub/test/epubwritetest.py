@@ -5,6 +5,7 @@ from lxml.cssselect import CSSSelector
 from lxml.etree import tostring
 from lxml import etree
 from datetime import date
+from datetime import datetime
 import re
 
 def epub_write_test():
@@ -70,7 +71,7 @@ def is_ancestor(ancestor, child):
         parent = parent.getparent()
     return (parent == ancestor)
 
-def epub_write_coolshell():
+def epub_write_coolshell(dt_last):
     book = epub.EpubBook()
     today = date.today()
    
@@ -94,6 +95,8 @@ def epub_write_coolshell():
     book.spine = ['nav']
     chapter_no = 1
    
+    pubtime_xpath = "//h5/a/time/@datetime"
+    pubtime_format = '%Y-%m-%dT%H:%M:%S'
     title_xpath = "//h1[@class='entry-title']"
     content_xpath = "//article/div[@class='entry-content']"
     end_xpath = "//p[re:match(., '全文完')]"
@@ -105,6 +108,10 @@ def epub_write_coolshell():
         content = response.read().decode('utf-8', 'ignore')
         response.close()
         chapter_tree = lxml.html.fromstring(content)
+        str_pubtime = chapter_tree.xpath(pubtime_xpath)[0][0:19]
+        dt_pubtime = datetime.strptime(str_pubtime, pubtime_format)
+        if dt_pubtime <= dt_last:
+            continue
         title = chapter_tree.xpath(title_xpath)[0].text
         content_tree = chapter_tree.xpath(content_xpath)[0]
         if end_xpath.find('re:match') > -1:
@@ -174,6 +181,112 @@ def epub_write_coolshell():
     # write to the file
     epub.write_epub(article_title + '.epub', book, {})
 
+def epub_write_rss_coolshell(dt_last):
+    book = epub.EpubBook()
+    today = date.today()
+   
+    filename_feed = 'coolshell.feed'
+    article_title = 'coolshell-%d%d%d' % (today.year, today.month, today.day)
+    # set metadata
+    book.set_identifier('id123456')
+    book.set_title(article_title)
+    book.set_language('en')
+    book.add_author('Chen hao')
+
+    #read html; fetch the title; fetch the text content
+    response = urlopen('http://coolshell.cn/feed')
+    content = response.read().decode('utf-8', 'ignore')
+    response.close()
+    with open(filename_feed, 'w') as f:
+        f.write(content)
+    tree = etree.parse(filename_feed) 
+        
+    chapter_tocs = []
+    book.spine = ['nav']
+    chapter_no = 1
+   
+    pubtime_xpath = "pubDate"
+    pubtime_format = '%a, %d %b %Y %H:%M:%S'
+    title_xpath = "title"
+    link_xpath = "link"
+    content_xpath = "//article/div[@class='entry-content']"
+    end_xpath = "//p[re:match(., '全文完')]"
+    chapters = tree.xpath("//item")
+    for chapter in chapters:
+        str_pubtime = chapter.xpath(pubtime_xpath)[0].text[0:24]
+        dt_pubtime = datetime.strptime(str_pubtime, pubtime_format)
+        if dt_pubtime <= dt_last:
+            continue
+        title = chapter.xpath(title_xpath)[0].text
+        href = chapter.xpath(link_xpath)[0].text
+        print(href)
+        response = urlopen(href)
+        content = response.read().decode('utf-8', 'ignore')
+        response.close()
+        chapter_tree = lxml.html.fromstring(content)
+        content_tree = chapter_tree.xpath(content_xpath)[0]
+        if end_xpath.find('re:match') > -1:
+            last_item = content_tree.xpath(end_xpath, namespaces={"re": "http://exslt.org/regular-expressions"})[0]
+        else:
+            last_item = content_tree.xpath(end_xpath)[0]
+        b_del = False
+        for item in content_tree.getchildren():
+            if b_del:
+                content_tree.remove(item)
+            if item == last_item:
+                b_del = True
+        img_xpath = "//img"
+        for img_item in content_tree.xpath(img_xpath):
+            if is_ancestor(content_tree, img_item):
+                img_url = img_item.get('src')
+                listtmp = re.split('/+', img_url)
+                jpg_name = listtmp[-1]
+                img_local = '%02d%s' % (chapter_no, jpg_name)
+                print('img ' + img_url + ' local ' + img_local)
+                get_image_from_url(img_url, img_local)
+                img_item.set('src', img_local)
+                #add the image to book
+                img_item = epub.EpubImage()
+                img_item.file_name = img_local
+                try:
+                    img_item.content = open(img_local, 'rb').read()
+                except Exception:
+                    print('Error open %s' % img_local)
+                book.add_item(img_item)
+        chapter_content = tostring(content_tree, encoding='unicode')
+        chapter_file = 'chap_%02d.xhtml' % chapter_no
+    
+        # create chapter
+        c1 = epub.EpubHtml(title=title, file_name=chapter_file, lang='hr')
+        c1.content='<html><body><h1>'+title+'</h1>'+chapter_content+'</body></html>'
+        book.add_item(c1)
+        chapter_tocs.append(epub.Link(chapter_file, title, title))
+        book.spine.append(c1)
+        chapter_no = chapter_no + 1 
+    
+    # define Table Of Contents
+    book.toc = tuple(chapter_tocs)
+    #book.toc = (epub.Link('chap_01.xhtml', 'Introduction', 'intro'),
+    #             (epub.Section('Simple book'),
+    #             (c1, ))
+    #            )
+    
+    # add default NCX and Nav file
+    book.add_item(epub.EpubNcx())
+    book.add_item(epub.EpubNav())
+    
+    # define CSS style
+    style = 'BODY {color: white;}'
+    nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
+    
+    # add CSS file
+    book.add_item(nav_css)
+    
+    # basic spine
+    
+    # write to the file
+    epub.write_epub(article_title + '.epub', book, {})
+
 def get_image_from_url(url, img_local):
     try:
         with urlopen(url) as img_url:
@@ -213,9 +326,30 @@ def deal_csarticle_content(filename, content_xpath, end_xpath):
 def csarticle_handler_test():
     deal_csarticle_content('articles_19840.html', "//article/div[@class='entry-content']", "//p[re:match(., '全文完')]")
 
+def datetime_test():
+    #print datetime
+    today = datetime.today()
+    today.strftime('%x')
+    today.strftime('%X')
+    today.strftime('%Y-%m-%dT%H:%M:%S')
+    today.strftime('%a, %d %b %Y %H:%M:%S')
+    #compare datetime
+    dt1=datetime.strptime('2019-10-01T19:21:10', '%Y-%m-%dT%H:%M:%S')
+    dt2=datetime.strptime('Tue, 01 Oct 2019 11:21:10', '%a, %d %b %Y %H:%M:%S')
+    if dt1 > dt2:
+        print('dt1 > dt2')
+    else:
+        print('dt1 <= dt2')
+
+def coolshell_test():
+    dt_last = datetime.strptime('2019-10-01T00:00:00', '%Y-%m-%dT%H:%M:%S')
+    #epub_write_coolshell(dt_last)
+    epub_write_rss_coolshell(dt_last)
+
 if __name__ == '__main__':
     #epub_write_test()
-    epub_write_coolshell()
+    #epub_write_coolshell()
     #get_image_from_url('https://coolshell.cn/wp-content/uploads/2019/10/HOL_blocking.png', 'hol_blocking.png')
     #get_image_from_url('https://coolshell.cn/wp-content/uploads/2019/10/HOL_blocking.png', '/home/test/hol_blocking.png')
     #csarticle_handler_test()
+    coolshell_test()
