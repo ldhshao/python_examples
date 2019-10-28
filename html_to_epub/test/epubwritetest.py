@@ -287,6 +287,114 @@ def epub_write_rss_coolshell(dt_last):
     # write to the file
     epub.write_epub(article_title + '.epub', book, {})
 
+def epub_write_rss_csdn(username, dt_last):
+    book = epub.EpubBook()
+    today = date.today()
+   
+    filename_feed = username + 'csdn.feed'
+    article_title = '%s-csdn-%d%d%d' % (username, today.year, today.month, today.day)
+    # set metadata
+    book.set_identifier('id123456')
+    book.set_title(article_title)
+    book.set_language('en')
+    book.add_author(username)
+
+    #read html; fetch the title; fetch the text content
+    response = urlopen('https://blog.csdn.net/%s/rss/list' % username)
+    content = response.read().decode('utf-8', 'ignore')
+    response.close()
+    with open(filename_feed, 'w') as f:
+        f.write(content)
+    tree = etree.parse(filename_feed) 
+        
+    chapter_tocs = []
+    book.spine = ['nav']
+    chapter_no = 1
+   
+    #<div id="content_views" class="markdown_views prism-github-gist">#//article/div[[@id='article_content']/div[@id='content_views']]
+    #<div class="postTime"># no need this config 
+    pubtime_xpath = "pubDate"
+    pubtime_format = '%Y/%m/%d %H:%M:%S'
+    title_xpath = "title"
+    link_xpath = "link"
+    content_xpath = "//article/div[[@id='article_content']/div[@id='content_views']"
+    end_xpath = "//div[@class='postTime']"
+    chapters = tree.xpath("//item")
+    for chapter in chapters:
+        str_pubtime = chapter.xpath(pubtime_xpath)[0].text
+        dt_pubtime = datetime.strptime(str_pubtime, pubtime_format)
+        if dt_pubtime <= dt_last:
+            continue
+        title = chapter.xpath(title_xpath)[0].text
+        href = chapter.xpath(link_xpath)[0].text
+        print(href)
+        response = urlopen(href)
+        content = response.read().decode('utf-8', 'ignore')
+        response.close()
+        chapter_tree = lxml.html.fromstring(content)
+        content_tree = chapter_tree.xpath(content_xpath)[0]
+        if end_xpath.find('re:match') > -1:
+            last_item = content_tree.xpath(end_xpath, namespaces={"re": "http://exslt.org/regular-expressions"})[0]
+        else:
+            last_item = content_tree.xpath(end_xpath)[0]
+        b_del = False
+        for item in content_tree.getchildren():
+            if b_del:
+                content_tree.remove(item)
+            if item == last_item:
+                b_del = True
+        img_xpath = "//img"
+        for img_item in content_tree.xpath(img_xpath):
+            if is_ancestor(content_tree, img_item):
+                img_url = img_item.get('src')
+                listtmp = re.split('/+', img_url)
+                jpg_name = listtmp[-1]
+                img_local = '%02d%s' % (chapter_no, jpg_name)
+                print('img ' + img_url + ' local ' + img_local)
+                get_image_from_url(img_url, img_local)
+                img_item.set('src', img_local)
+                #add the image to book
+                img_item = epub.EpubImage()
+                img_item.file_name = img_local
+                try:
+                    img_item.content = open(img_local, 'rb').read()
+                except Exception:
+                    print('Error open %s' % img_local)
+                book.add_item(img_item)
+        chapter_content = tostring(content_tree, encoding='unicode')
+        chapter_file = 'chap_%02d.xhtml' % chapter_no
+    
+        # create chapter
+        c1 = epub.EpubHtml(title=title, file_name=chapter_file, lang='hr')
+        c1.content='<html><body><h1>'+title+'</h1>'+chapter_content+'</body></html>'
+        book.add_item(c1)
+        chapter_tocs.append(epub.Link(chapter_file, title, title))
+        book.spine.append(c1)
+        chapter_no = chapter_no + 1 
+    
+    # define Table Of Contents
+    book.toc = tuple(chapter_tocs)
+    #book.toc = (epub.Link('chap_01.xhtml', 'Introduction', 'intro'),
+    #             (epub.Section('Simple book'),
+    #             (c1, ))
+    #            )
+    
+    # add default NCX and Nav file
+    book.add_item(epub.EpubNcx())
+    book.add_item(epub.EpubNav())
+    
+    # define CSS style
+    style = 'BODY {color: white;}'
+    nav_css = epub.EpubItem(uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
+    
+    # add CSS file
+    book.add_item(nav_css)
+    
+    # basic spine
+    
+    # write to the file
+    epub.write_epub(article_title + '.epub', book, {})
+
 def get_image_from_url(url, img_local):
     try:
         with urlopen(url) as img_url:
