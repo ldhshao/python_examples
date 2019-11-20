@@ -1,5 +1,6 @@
 var http = require('http')
 var fs = require('fs')
+var extract = require('./extract')
 var NO_RESOURCE = '<h1>Cannot find the resource</h1>'
 
 var handleError = function(err, res) {
@@ -9,16 +10,15 @@ var handleError = function(err, res) {
 var server = http.createServer(function (req, res) {
   console.log('Responding to a request.');
   var url = req.url;
-  var filename = 'index.html';
-  if (url.length > 1) {
-    filename = url.substring(1);
-  }
+  var myextract = new extract('app');
+  var filename = myextract.filePath(url);
   console.log(filename);
-  fs.readFile('app/' + filename, function(err, data){
+  fs.readFile(filename, function(err, data){
     if (err){
       handleError(err, res);
     }
     else{
+      res.setHeader('Content-Type', 'text/html');
       res.end(data);
     }
   });
