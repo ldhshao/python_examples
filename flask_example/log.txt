@@ -241,3 +241,19 @@ INFO:app:Have created an app instance
 INFO:app:Have created an app instance
 INFO:app:Have created an app instance
 INFO:app:Have created an app instance
+INFO:app:Have created an app instance
+INFO:root:manager run start
+INFO:werkzeug: * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app:Have created an app instance
+INFO:root:manager run start
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 185-612-512
+INFO:app:index
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET / HTTP/1.1" 500 -
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [01/Nov/2019 11:06:13] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
