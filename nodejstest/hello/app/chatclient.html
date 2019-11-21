@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat client</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+  <h1>Chat client</h1>  
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form data-client="form">
+        <div class="form-group">
+          <div>
+            <button type="button" class="btn btn-default">Connect</button>
+          </div>
+          <div>
+            <input class="form-cotrol" name="inputmsg">
+            <button type="button" class="btn btn-default">Send</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Chat history</label>
+          <ul>
+            <li>item1</li>
+            <li>item2</li>
+          </ul>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js" charset="utf-8"></script>
+  <script src="../chatclient.js" charset="utf-8"></script>
+</body>
+</html>
