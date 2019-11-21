@@ -1,7 +1,7 @@
 'use strict';
 
 function Extract(dir) {
-  this.dir == '';
+  this.dir = '';
   if (dir.length > 0){
     this.dir = dir + '/';
   }

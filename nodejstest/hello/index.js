@@ -1,7 +1,10 @@
 var http = require('http')
 var fs = require('fs')
 var extract = require('./extract')
+var mywebsocketsrv = require('./websockets-server')
 var NO_RESOURCE = '<h1>Cannot find the resource</h1>'
+var HTTP_SERVER_PORT = 3000
+var WS_SERVER_PORT = 3001
 
 var handleError = function(err, res) {
   res.writeHead(404);
@@ -24,5 +27,7 @@ var server = http.createServer(function (req, res) {
   });
   //res.end('<h1>Hello, world</h1>');
 });
+
+var wss = new mywebsocketsrv(WS_SERVER_PORT); 
 
 server.listen(3000);
