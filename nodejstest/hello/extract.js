@@ -2,6 +2,7 @@
 
 function Extract(dir) {
   this.dir = '';
+  this.jsregexp = /\.js$/i;
   if (dir.length > 0){
     this.dir = dir + '/';
   }
@@ -11,6 +12,10 @@ function Extract(dir) {
     if (url.length > 1) {
       fileName = url.substring(1);
     }
+    if (this.jsregexp.test(url)){
+      return fileName;
+    }
+    
     return this.dir + fileName;
   };
 }

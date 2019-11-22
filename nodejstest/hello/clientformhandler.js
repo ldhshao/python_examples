@@ -12,6 +12,10 @@
     this.$formElement = $(selector);
   }
 
+  FormHandler.prototype.addClickHandler = function(clkslt, fn){
+    this.$formElement.on('click', clkslt, fn);
+  };
+
   App.FormHandler = FormHandler;
   window.App = App;
 })(window);
