@@ -6,14 +6,31 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build": "browserify -d app/scripts/src/main.js -o app/scripts/dist/main.js",
+    "watch": "watchify -v -d app/scripts/src/main.js -o app/scripts/dist/main.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.0",
+    "nodemon": "^1.19.4",
+    "watchify": "^3.11.1"
   },
   "dependencies": {
     "ws": "^7.2.0"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "sourceMap": true
+        }
+      ]
+    ]
   }
 }

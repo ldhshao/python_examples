@@ -12,9 +12,9 @@ function Extract(dir) {
     if (url.length > 1) {
       fileName = url.substring(1);
     }
-    if (this.jsregexp.test(url)){
-      return fileName;
-    }
+    //if (this.jsregexp.test(url)){
+    //  fileName = 'scripts/' + fileName;
+    //}
     
     return this.dir + fileName;
   };
