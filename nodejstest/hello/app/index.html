@@ -6,6 +6,23 @@
 </head>
 <body>
   <h1>Chat App</h1>  
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <form data-chat="form">
+        <div class="form-group">
+          <label>Chat history</label>
+          <ul data-chat="chathistory">
+            <li>item1</li>
+            <li>item2</li>
+          </ul>
+        </div>
+        <div class="form-group">
+          <input class="form-cotrol" data-chat="message">
+          <button type="button" class="btn btn-default">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
   <script src="scripts/dist/main.js" charset="utf-8"></script>
 </body>
 </html>

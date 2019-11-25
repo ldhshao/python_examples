@@ -1,13 +1,21 @@
-import WsClient from './wsclient'
+import WsClient from './wsclient';
+import {ChatForm} from './dom.js';
+
+const FORM_SELECTOR = '[data-chat="form"]';
+const MSG_SELECTOR = '[data-chat="message"]';
+const CHATLIST_SELECTOR = '[data-chat="chathistory"]';
 
 class ChatApp{
   constructor(){
     console.log('Hello, ES6 Chat App');
+    this.form = new ChatForm(FORM_SELECTOR, MSG_SELECTOR);
     WsClient.init('ws://localhost:3001');
     WsClient.addOpenHandler(() => {
       console.log('have connected to server');
-      //let hellomsg = new ChatMessage();
-      WsClient.sendMessage(new ChatMessage({message:'hello'}));
+      this.form.addBtnClickHandler((msg) => {
+        let chatMsg = new ChatMessage({message:msg});
+        WsClient.sendMessage(chatMsg);
+      });
     });
     WsClient.addMessageHandler((data) => {
       console.log(data);
