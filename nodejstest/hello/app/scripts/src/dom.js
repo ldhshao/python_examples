@@ -60,12 +60,16 @@ export class Point {
   }
 }
 
+export function promptForUsername(){
+  let username = prompt('Enter a username:');
+  return username.toLowerCase();
+}
+
 function formatDate(date) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
-  var ampm = hours >= 12 ? 'pm' : 'am';
   minutes = minutes < 10 ? '0'+minutes : minutes;
-  var strTime = hours + ':' + minutes + ' ' + ampm;
+  var strTime = hours + ':' + minutes;
   return date.getFullYear() + '/' + date.getMonth()+1 + "/" + date.getDate() + "/" + "  " + strTime;
 }
 
