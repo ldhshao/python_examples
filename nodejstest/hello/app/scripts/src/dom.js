@@ -1,25 +1,45 @@
 import $ from 'jquery';
 
 export class ChatForm {
-  contructor(formsel, inputsel){
-    this.$formElement = $(formsel);
-    this.$inputElement = $(inputsel);
-    this.test = 'test';
-    this.$test = 'test2';
-    console.log(this.$formElement);
-    console.log(this.test);
-    console.log(this.$test);
+  constructor(formsel, inputsel){
+    this.$form = $(formsel);
+    this.$input = $(inputsel);
+    this.dump();
   }
 
   addBtnClickHandler(fn){
-    //console.log(this.$formElement);
-    //console.log(this.$inputElement);
-    this.$formElement.find('button').on('click', () => {
-      let val = this.$inputElement.val;
+    this.$form.find('button').on('click', () => {
+      let val = this.$input.val;
       fn(val);
-      this.$inputElement.val = '';
+      this.$input.val = '';
     });
+  }
+  dump(){
+    //console.log(this.$formElement);
+    console.log(this.$form);
+    console.log(this.$input);
   }
 }
 export class ChatList {
+}
+export class Point {
+  constructor(x, y){
+    this.x = x;
+    this.y = y;
+    this.dump();
+  }
+  dump(){
+    console.log('point(' + this.x + ', ' + this.y + ')');
+  }
+}
+export class ChatTest {
+  constructor(formsel, inputsel){
+    this.formsel = formsel;
+    this.inputsel = inputsel;
+    this.dump();
+  }
+  dump(){
+    console.log(this.formsel);
+    console.log(this.inputsel);
+  }
 }

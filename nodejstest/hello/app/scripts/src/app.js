@@ -1,5 +1,5 @@
 import WsClient from './wsclient';
-import {ChatForm} from './dom.js';
+import {ChatForm, Point} from './dom.js';
 
 const FORM_SELECTOR = '[data-chat="form"]';
 const MSG_SELECTOR = '[data-chat="message"]';
@@ -9,6 +9,7 @@ class ChatApp{
   constructor(){
     console.log('Hello, ES6 Chat App');
     this.form = new ChatForm(FORM_SELECTOR, MSG_SELECTOR);
+    //this.point = new Point(10, 50);
     WsClient.init('ws://localhost:3001');
     WsClient.addOpenHandler(() => {
       console.log('have connected to server');
