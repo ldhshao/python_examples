@@ -9,9 +9,12 @@ export class ChatForm {
 
   addBtnClickHandler(fn){
     this.$form.find('button').on('click', () => {
-      let val = this.$input.val;
-      fn(val);
-      this.$input.val = '';
+      let val = this.$input.val();
+      if (val.length > 0)
+      {
+        fn(val);
+        this.$input.val('');
+      }
     });
   }
   dump(){
@@ -30,16 +33,5 @@ export class Point {
   }
   dump(){
     console.log('point(' + this.x + ', ' + this.y + ')');
-  }
-}
-export class ChatTest {
-  constructor(formsel, inputsel){
-    this.formsel = formsel;
-    this.inputsel = inputsel;
-    this.dump();
-  }
-  dump(){
-    console.log(this.formsel);
-    console.log(this.inputsel);
   }
 }
