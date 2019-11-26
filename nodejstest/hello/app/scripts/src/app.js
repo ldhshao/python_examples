@@ -1,6 +1,7 @@
 import WsClient from './wsclient';
-import {ChatForm, Point} from './dom.js';
+import {ChatForm, Point, ChatList} from './dom.js';
 
+const WS_URL = 'ws://172.16.3.160:3001';
 const FORM_SELECTOR = '[data-chat="form"]';
 const MSG_SELECTOR = '[data-chat="message"]';
 const CHATLIST_SELECTOR = '[data-chat="chathistory"]';
@@ -10,7 +11,8 @@ class ChatApp{
     console.log('Hello, ES6 Chat App');
     this.form = new ChatForm(FORM_SELECTOR, MSG_SELECTOR);
     //this.point = new Point(10, 50);
-    WsClient.init('ws://localhost:3001');
+    this.chatlist = new ChatList(CHATLIST_SELECTOR);
+    WsClient.init(WS_URL);
     WsClient.addOpenHandler(() => {
       console.log('have connected to server');
       this.form.addBtnClickHandler((msg) => {
@@ -20,6 +22,7 @@ class ChatApp{
     });
     WsClient.addMessageHandler((data) => {
       console.log(data);
+      this.chatlist.drawMessage(data);
     });
   }
 }
