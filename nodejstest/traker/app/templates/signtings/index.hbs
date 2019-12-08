@@ -1,3 +1,9 @@
-
-<h1>Sightings Index</h1>
-{{outlet}}
+<div class="panel panel-default">
+  <ul class="list-group">
+    {{#each model as |signting|}}
+      <li class="list-group-item">
+        {{signting.location}} - {{signting.signtedAt}}
+      </li>
+    {{/each}}
+  </ul>
+</div>
