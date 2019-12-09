@@ -1,3 +1,9 @@
-
-<h1>Witnesses</h1>
-{{outlet}}
+<div class="panel panel-default">
+  <ul class="list-group">
+    {{#each model as |witness|}}
+      <li class="list-group-item">
+        {{witness.fullName}} - {{witness.email}}
+      </li>
+    {{/each}}
+  </ul>
+</div>
