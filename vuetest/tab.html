@@ -5,22 +5,26 @@
     <title>Vue 测试实例 - 菜鸟教程(runoob.com)</title>
     <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
     <style type="text/css">
-      ul{
-            display:inline;
-            white-space: nowrap;
-        }
-        ul li{
-            padding: 10px 20px;
-            display: inline-block;
-            background:pink;
-            white-space:nowrap;
-        }
+      * {
+        padding-left: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      ul {
+         display:inline;
+      }
+      ul li{
+         padding: 10px 20px;
+         display: inline-block;
+      }
+      .active {background-color: #CC5577}
+      .inactive {background-color: pink}
     </style>
   </head>
   <body>
     <div id="app">
       <ul>
-        <li v-for="(item, index) in list" :class="{active: selected==index}" @mouseenter="change(index)">{{item.title}}</li>
+        <li v-for="(item, index) in list" :class="selected===index?'active':'inactive'" @mouseenter="change(index)">{{item.title}}</li>
       </ul>
       <component :is="currentView"></component>
     </div>
